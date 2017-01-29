@@ -44,8 +44,10 @@ class Doctor
      */
     private $patients;
 
-    public function __construct()
+    public function __construct( $id = null, $name = '' )
     {
+        $this->id = $id;
+        $this->na = $name;
         $this->patients = new ArrayCollection();
     }
 
