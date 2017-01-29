@@ -6,18 +6,21 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PatientControllerTest extends WebTestCase
 {
-    public function testShow()
+    public function testShowJsonResponse()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
+        $client->request('GET', '/patient/1');
+
+        $this->assertJson( $client->getResponse()->getContent() );
+
     }
 
-    public function testAdd()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', 'add');
-    }
+    // public function testAdd()
+    // {
+    //     $client = static::createClient();
+    //
+    //     $crawler = $client->request('GET', 'add');
+    // }
 
 }
