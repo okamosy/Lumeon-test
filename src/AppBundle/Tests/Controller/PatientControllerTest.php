@@ -49,11 +49,26 @@ class PatientControllerTest extends WebTestCase
 
     }
 
-    // public function testAdd()
-    // {
-    //     $client = static::createClient();
-    //
-    //     $crawler = $client->request('GET', 'add');
-    // }
+    public function testAddValidPatient()
+    {
+        $client = static::createClient();
+
+        $newPatient = [
+            'name' => 'Test Patient',
+            'dob' => '1995-07-07',
+            'gender' => 'female',
+        ];
+
+        $crawler = $client->request(
+            'POST',
+            '/patient/add',
+            [], // parameters
+            [],// files
+            [ 'CONTENT_TYPE' => 'application/json' ], // server
+            json_encode( $newPatient )
+        );
+
+        $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
+    }
 
 }
