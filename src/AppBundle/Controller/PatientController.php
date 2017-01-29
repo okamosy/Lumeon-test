@@ -5,6 +5,13 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * Class PatientController
+ *
+ * @package AppBundle\Controller
+ *
+ * @Route("/patient")
+ */
 class PatientController extends Controller
 {
     /**
@@ -18,7 +25,7 @@ class PatientController extends Controller
     }
 
     /**
-     * @Route("add")
+     * @Route("/add")
      */
     public function AddAction()
     {
