@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Serializer;
 class DoctorController extends Controller
 {
     /**
-     * @Route("/{doctorId}")
+     * @Route("/view/{doctorId}")
      *
      * @param int $doctorId
      *
