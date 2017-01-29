@@ -33,16 +33,16 @@ class DoctorControllerTest extends WebTestCase
     {
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+        $doctor = new Doctor( 1, 'Test Doctor' );
 
         $client = static::createClient();
         $client->request( 'GET', '/doctor/1' );
         $response = $client->getResponse();
 
-        $doctor = new Doctor( 1, 'Test Doctor' );
-
+        $this->assertEquals( 200, $response->getStatusCode() );
+        
         $responseDoctor = $serializer->deserialize( json_decode($response->getContent()), Doctor::class, 'json' );
 
-        $this->assertEquals( 200, $response->getStatusCode() );
         $this->assertEquals( $doctor, $responseDoctor );
     }
 }
