@@ -38,8 +38,11 @@ class PatientControllerTest extends WebTestCase
         $client = static::createClient();
 
         $client->request( 'GET', '/patient/view/1000' );
+        $response = $client->getResponse();
+        $responseData = json_decode( $response->getContent() );
 
-        $this->assertEquals( 404, $client->getResponse()->getStatusCode() );
+        $this->assertEquals( 404, $response->getStatusCode() );
+        $this->assertEquals( 'Patient not found', $responseData->msg );
     }
 
     public function testShowJsonValidPatient()

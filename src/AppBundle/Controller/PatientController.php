@@ -37,7 +37,7 @@ class PatientController extends Controller
         {
             return new JsonResponse(
                 [
-                    'message' => 'The specified patient could not be found',
+                    'msg' => 'Patient not found',
                 ],
                 404
             );
