@@ -25,13 +25,12 @@ class DoctorController extends Controller
      */
     public function ShowAction( $doctorId = 0)
     {
-        try {
-            return new JsonResponse();
-        }
-        catch( \Exception $e )
-        {
+        $doctor = $this->getDoctrine()->getRepository( 'AppBundle:Doctor' )->selectById( $doctorId );
 
+        if( empty( $doctor ) ) {
+            return new JsonResponse( [ 'message' => 'Doctor not found' ], 404 );
         }
+        return new JsonResponse();
     }
 
 }
