@@ -57,4 +57,17 @@ class DoctorControllerTest extends WebTestCase
         $this->assertEquals( 404, $response->getStatusCode() );
         $this->assertEquals( 'Doctor not found', $responseData->msg );
     }
+
+    public function testAssignInvalidPatientValidDoctor()
+    {
+        $client = static::createClient();
+        $client->request( 'POST', '/doctor/assign/1/0' );
+
+        $response = $client->getResponse();
+        $responseData = json_decode( $response->getContent() );
+
+        $this->assertEquals( 404, $response->getStatusCode() );
+        $this->assertEquals( 'Patient not found', $responseData->msg );
+
+    }
 }
