@@ -14,7 +14,7 @@ class PatientControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request('GET', '/patient/1');
+        $client->request('GET', '/patient/view/1');
 
         $this->assertJson( $client->getResponse()->getContent() );
 
@@ -24,7 +24,7 @@ class PatientControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $client->request( 'GET', '/patient/1000' );
+        $client->request( 'GET', '/patient/view/1000' );
 
         $this->assertEquals( 404, $client->getResponse()->getStatusCode() );
     }
@@ -37,7 +37,7 @@ class PatientControllerTest extends WebTestCase
         $patient = new Patient( 1, 'John Doe', new \DateTime( '2000-01-01' ), 'male' );
 
         $client = static::createClient();
-        $client->request( 'GET', '/patient/1' );
+        $client->request( 'GET', '/patient/view/1' );
 
         $response = $client->getResponse();
 

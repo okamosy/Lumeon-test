@@ -19,7 +19,11 @@ use Symfony\Component\Serializer\Serializer;
 class PatientController extends Controller
 {
     /**
-     * @Route("/{patientId}")
+     * @Route("/view/{patientId}")
+     *
+     * @param int $patientId
+     *
+     * @return JsonResponse
      */
     public function ShowAction( $patientId = 0 )
     {
