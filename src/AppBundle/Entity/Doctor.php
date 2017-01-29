@@ -48,7 +48,7 @@ class Doctor
     {
         $this->id = $id;
         $this->name = $name;
-        $this->hospital = ( !$hospital instanceof ArrayCollection ) ? new ArrayCollection() : $hospital;
+        $this->hospital = $hospital;
         $this->patients = ( !$patients instanceof ArrayCollection ) ? new ArrayCollection() : $patients;
     }
 
@@ -88,10 +88,10 @@ class Doctor
     /**
      * Set the Hospital
      *
-     * @param Hospital $hospital
+     * @param $hospital
      * @return Doctor
      */
-    public function setHospital( Hospital $hospital )
+    public function setHospital( $hospital )
     {
         $this->hospital = $hospital;
 
