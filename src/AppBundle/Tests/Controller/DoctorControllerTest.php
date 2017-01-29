@@ -3,6 +3,7 @@
 namespace AppBundle\Tests\Controller;
 
 use AppBundle\Entity\Doctor;
+use AppBundle\Entity\Patient;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -88,5 +89,26 @@ class DoctorControllerTest extends WebTestCase
         $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
         $baseDoctor = $serializer->deserialize( json_decode( $client->getResponse()->getContent() ), Doctor::class, 'json' );
         $this->assertEquals( $baseDoctor, $responseDoctor );
+    }
+
+    public function testAssignPatientDoctorAssignmentList()
+    {
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+
+        $client = static::createClient();
+
+        $client->request( 'GET', '/patient/view/1' );
+        $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
+        $patient = $serializer->deserialize( json_decode( $client->getResponse()->getContent() ), Patient::class, 'json' );
+
+        $client->request( 'POST', '/doctor/assign/1/1' );
+
+        $response = $client->getResponse();
+        $this->assertEquals( 200, $response->getStatusCode() );
+
+        $responseDoctor = $serializer->deserialize( json_decode( $response->getContent() ), Doctor::class, 'json' );
+
+        $this->assertAttributeContains( $patient, 'patients', $responseDoctor );
     }
 }
