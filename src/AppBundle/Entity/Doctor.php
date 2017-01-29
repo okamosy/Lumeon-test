@@ -44,11 +44,12 @@ class Doctor
      */
     private $patients;
 
-    public function __construct( $id = null, $name = '' )
+    public function __construct( $id = 0, $name = '', $hospital = null, $patients = null )
     {
         $this->id = $id;
-        $this->na = $name;
-        $this->patients = new ArrayCollection();
+        $this->name = $name;
+        $this->hospital = ( $hospital instanceof ArrayCollection ) ? new ArrayCollection() : $hospital;
+        $this->patients = ( $patients instanceof ArrayCollection ) ? new ArrayCollection() : $patients;
     }
 
     /**
@@ -60,7 +61,7 @@ class Doctor
     {
         return $this->id;
     }
-
+    
     /**
      * Set name
      *
@@ -114,7 +115,7 @@ class Doctor
      *
      * @return Doctor
      */
-    public function setPatients( ArrayCollection $patients )
+    public function setPatient( ArrayCollection $patients )
     {
         $this->patients = $patients;
 
