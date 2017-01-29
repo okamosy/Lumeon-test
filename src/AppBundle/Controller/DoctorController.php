@@ -82,8 +82,22 @@ class DoctorController extends Controller
             );
         }
 
-        $normalizers = array(new ObjectNormalizer());
-        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $doctor->addPatient( $patient );
+        $patient->setDoctor( $doctor );
+        $entityManager->persist( $doctor );
+        $entityManager->persist( $patient );
+        $entityManager->flush();
+
+        $doctor->getPatients();
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceHandler(function( $object )
+        {
+            return $object->getName();
+        } );
+
+        $serializer = new Serializer([ $normalizer ], [ new JsonEncoder() ] );
 
         return new JsonResponse(
             $serializer->serialize( $doctor, 'json' )
