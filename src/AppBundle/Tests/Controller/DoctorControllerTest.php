@@ -11,15 +11,25 @@ use Symfony\Component\Serializer\Serializer;
 
 class DoctorControllerTest extends WebTestCase
 {
+    /** @var   */
+    protected $fixtures;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $fixtures = $this->loadFixtureFiles(
+        $this->fixtures = $this->loadFixtureFiles(
             [
                 '@AppBundle/DataFixtures/ORM/fixtures.yml',
             ]
         );
+    }
+
+    protected function assertDoctor( Doctor $expected, Doctor $actual )
+    {
+        $this->assertEquals( $expected->getName(), $actual->getName() );
+        $this->assertEquals( $expected->getId(), $actual->getId() );
+        $this->assertEquals( $expected->getHospital(), $actual->getHospital() );
     }
 
     public function testShowJsonResponse()
@@ -45,17 +55,16 @@ class DoctorControllerTest extends WebTestCase
     {
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
-        $doctor = new Doctor( 1, 'Test Doctor' );
 
         $client = static::createClient();
         $client->request( 'GET', '/doctor/view/1' );
         $response = $client->getResponse();
 
         $this->assertEquals( 200, $response->getStatusCode() );
-        
-        $responseDoctor = $serializer->deserialize( json_decode($response->getContent()), Doctor::class, 'json' );
 
-        $this->assertEquals( $doctor, $responseDoctor );
+        /** @var Doctor $responseDoctor */
+        $responseDoctor = $serializer->deserialize( json_decode($response->getContent()), Doctor::class, 'json' );
+        $this->assertDoctor(  $this->fixtures['doctor1'], $responseDoctor );
     }
 
     public function testAssignPatientInvalidDoctor()
@@ -96,10 +105,7 @@ class DoctorControllerTest extends WebTestCase
 
         $responseDoctor = $serializer->deserialize( json_decode( $response->getContent() ), Doctor::class, 'json' );
 
-        $client->request( 'GET', '/doctor/view/1' );
-        $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
-        $baseDoctor = $serializer->deserialize( json_decode( $client->getResponse()->getContent() ), Doctor::class, 'json' );
-        $this->assertEquals( $baseDoctor, $responseDoctor );
+        $this->assertDoctor( $this->fixtures['doctor1'], $responseDoctor );
     }
 
     public function testAssignPatientDoctorAssignmentList()
