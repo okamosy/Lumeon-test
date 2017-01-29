@@ -49,8 +49,35 @@ class PatientControllerTest extends WebTestCase
 
     }
 
-    public function testAddValidPatient()
+    public function testAddValidPatientStatusCode()
     {
+        $client = static::createClient();
+
+        $newPatient = [
+            'name'   => 'Test Patient',
+            'dob'    => '1995-07-07',
+            'gender' => 'female',
+        ];
+
+        $client->request(
+            'POST',
+            '/patient/add',
+            [], // parameters
+            [],// files
+            ['CONTENT_TYPE' => 'application/json'], // server
+            json_encode( $newPatient )
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertEquals( 200, $response->getStatusCode() );
+    }
+
+    public function testAddValidPatientData()
+    {
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+
         $client = static::createClient();
 
         $newPatient = [
@@ -68,7 +95,17 @@ class PatientControllerTest extends WebTestCase
             json_encode( $newPatient )
         );
 
-        $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
-    }
+        $response = $client->getResponse();
 
+        $this->assertEquals( 200, $response->getStatusCode() );
+
+        /** @var Patient $patient */
+        $patient = $serializer->deserialize( json_decode( $response->getContent()), Patient::class, 'json' );
+
+        // Since we don't necessarily know the ID of the new patient...test each field
+        $this->assertNotEquals( 0, $patient->getId() );
+        $this->assertEquals( $newPatient['name'], $patient->getName() );
+        $this->assertEquals( new \DateTime( $newPatient['dob'] ), $patient->getDob() );
+        $this->assertEquals( $newPatient['gender'], $patient->getGender() );
+    }
 }
