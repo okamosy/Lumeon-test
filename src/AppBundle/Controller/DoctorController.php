@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Doctor;
+use AppBundle\Entity\Patient;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,9 +36,14 @@ class DoctorController extends Controller
             return new JsonResponse( [ 'message' => 'Doctor ('.$doctorId.') not found' ], 404 );
         }
 
-        $normalizers = array(new ObjectNormalizer());
+        $normalizer = new ObjectNormalizer();
+        $normalizer->setCircularReferenceHandler(function( $object )
+        {
+            return $object->getName();
+        } );
 
-        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+        $serializer = new Serializer([ $normalizer ], [ new JsonEncoder() ] );
+
         return new JsonResponse(
                 $serializer->serialize( $doctor, 'json' )
         );
@@ -53,6 +60,7 @@ class DoctorController extends Controller
      */
     public function AssignAction( $doctorId = 0, $patientId = 0 )
     {
+        /** @var Doctor $doctor */
         $doctor = $this->getDoctrine()->getRepository( 'AppBundle:Doctor' )->selectById( $doctorId );
         if( empty( $doctor ) ) {
             return new JsonResponse(
@@ -63,6 +71,7 @@ class DoctorController extends Controller
             );
         }
 
+        /** @var Patient $patient */
         $patient = $this->getDoctrine()->getRepository( 'AppBundle:Patient' )->selectById( $patientId );
         if( empty( $patient ) ) {
             return new JsonResponse(
