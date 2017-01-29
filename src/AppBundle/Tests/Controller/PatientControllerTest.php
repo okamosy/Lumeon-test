@@ -16,6 +16,15 @@ class PatientControllerTest extends WebTestCase
 
     }
 
+    public function testShowJsonMissingPatient()
+    {
+        $client = static::createClient();
+
+        $client->request( 'GET', '/patient/1000' );
+
+        $this->assertEquals( 404, $client->getResponse()->getStatusCode() );
+    }
+
     // public function testAdd()
     // {
     //     $client = static::createClient();
