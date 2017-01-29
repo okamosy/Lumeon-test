@@ -70,4 +70,23 @@ class DoctorControllerTest extends WebTestCase
         $this->assertEquals( 'Patient not found', $responseData->msg );
 
     }
+
+    public function testAssignPatientDoctorReturnsDoctor()
+    {
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+
+        $client = static::createClient();
+        $client->request( 'POST', '/doctor/assign/1/1' );
+
+        $response = $client->getResponse();
+        $this->assertEquals( 200, $response->getStatusCode() );
+
+        $responseDoctor = $serializer->deserialize( json_decode( $response->getContent() ), Doctor::class, 'json' );
+
+        $client->request( 'GET', '/doctor/view/1' );
+        $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
+        $baseDoctor = $serializer->deserialize( json_decode( $client->getResponse()->getContent() ), Doctor::class, 'json' );
+        $this->assertEquals( $baseDoctor, $responseDoctor );
+    }
 }
