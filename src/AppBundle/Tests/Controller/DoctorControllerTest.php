@@ -4,6 +4,7 @@ namespace AppBundle\Tests\Controller;
 
 use AppBundle\Entity\Doctor;
 use AppBundle\Entity\Patient;
+use Doctrine\Common\Collections\ArrayCollection;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -115,9 +116,8 @@ class DoctorControllerTest extends WebTestCase
 
         $client = static::createClient();
 
-        $client->request( 'GET', '/patient/view/1' );
-        $this->assertEquals( 200, $client->getResponse()->getStatusCode() );
-        $patient = $serializer->deserialize( json_decode( $client->getResponse()->getContent() ), Patient::class, 'json' );
+        /** @var Patient $patient */
+        $patient = $this->fixtures['patient1'];
 
         $client->request( 'POST', '/doctor/assign/1/1' );
 
@@ -126,6 +126,12 @@ class DoctorControllerTest extends WebTestCase
 
         $responseDoctor = $serializer->deserialize( json_decode( $response->getContent() ), Doctor::class, 'json' );
 
-        $this->assertAttributeContains( $patient, 'patients', $responseDoctor );
+        /** @var ArrayCollection $patientList */
+        $patientList = $responseDoctor->getPatients();
+        $this->assertEquals( 2, $patientList->count() );
+
+        $addedPatient = $responseDoctor->getPatient( $patient->getId() );
+        $this->assertEquals( $patient->getId(), $addedPatient['id'] );
+        $this->assertEquals( $patient->getName(), $addedPatient['name'] );
     }
 }
