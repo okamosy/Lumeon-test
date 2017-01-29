@@ -70,6 +70,13 @@ class Patient
      */
     private $doctor = null;
 
+    public function __construct( $id = 0, $name = '', $dob = null )
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->dob = ( $dob instanceof \DateTime ) ? clone $dob : null;
+    }
+
     /**
      * @return int
      */
@@ -125,8 +132,24 @@ class Patient
      */
     public function setDob( $dob )
     {
-        $this->dob = $dob;
+        if( !$dob instanceof \DateTime )
+        {
+            /**
+             * If this is a timestamp, prepend a '@' as per the Unix Timestamp:
+             * http://www.php.net/manual/en/datetime.formats.compound.php
+             */
+            if( is_int( $dob ) )
+            {
+                $dob = '@' . $dob;
+            }
 
+            $this->dob = new \DateTime( $dob );
+        }
+        else
+        {
+            // Because objects are referenced, make sure we have our own copy
+            $this->dob = clone $dob;
+        }
         return $this;
     }
 
