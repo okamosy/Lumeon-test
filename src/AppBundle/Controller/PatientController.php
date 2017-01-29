@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,12 +51,11 @@ class PatientController extends Controller
 
     /**
      * @Route("/add")
+     * @Method({"POST"})
      */
     public function AddAction()
     {
-        return $this->render('AppBundle:Patient:add.html.twig', array(
-            // ...
-        ));
+        return new JsonResponse();
     }
 
 }

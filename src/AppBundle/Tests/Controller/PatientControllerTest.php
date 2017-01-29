@@ -59,7 +59,7 @@ class PatientControllerTest extends WebTestCase
             'gender' => 'female',
         ];
 
-        $crawler = $client->request(
+        $client->request(
             'POST',
             '/patient/add',
             [], // parameters
