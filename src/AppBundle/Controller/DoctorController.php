@@ -17,7 +17,8 @@ class DoctorController extends Controller
 {
     /**
      * @Route("/{id}")
-     *
+     * @Entity("doctor", expr="repository.selectById(id)")
+     * 
      * @param Doctor $doctor
      * @return \Symfony\Component\HttpFoundation\Response
      */
