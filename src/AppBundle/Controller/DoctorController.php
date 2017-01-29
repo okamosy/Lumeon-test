@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -43,6 +44,7 @@ class DoctorController extends Controller
 
     /**
      * @Route("/assign/{doctorId}/{patientId}")
+     * @Method({"POST"})
      *
      * @param int $doctorId
      * @param int $patientId
@@ -58,6 +60,16 @@ class DoctorController extends Controller
                     'msg' => 'Doctor not found'
                 ],
                  404
+            );
+        }
+
+        $patient = $this->getDoctrine()->getRepository( 'AppBundle:Patient' )->selectById( $patientId );
+        if( empty( $patient ) ) {
+            return new JsonResponse(
+                [
+                    'msg' => 'Patient not found'
+                ],
+                404
             );
         }
         return new JsonResponse();
