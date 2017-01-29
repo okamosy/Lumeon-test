@@ -20,6 +20,18 @@ class PatientController extends Controller
      */
     public function ShowAction( $patientId = 0 )
     {
+        $patientRepo = $this->getDoctrine()->getRepository( 'AppBundle:Patient' );
+
+        $patient = $patientRepo->selectById( $patientId );
+        if( empty( $patient ) )
+        {
+            return new JsonResponse(
+                [
+                    'message' => 'The specified patient could not be found',
+                ],
+                404
+            );
+        }
         return new JsonResponse();
     }
 
