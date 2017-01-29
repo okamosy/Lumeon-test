@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Doctor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class DoctorController
@@ -17,16 +18,20 @@ class DoctorController extends Controller
 {
     /**
      * @Route("/{id}")
-     * @Entity("doctor", expr="repository.selectById(id)")
-     * 
-     * @param Doctor $doctor
+     *
+     * @param int doctorId
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function ShowAction( Doctor $doctor )
+    public function ShowAction( $doctorId = 0)
     {
-        return $this->render('AppBundle:Doctor:show.html.twig', array(
-            // ...
-        ));
+        try {
+            return new JsonResponse();
+        }
+        catch( \Exception $e )
+        {
+
+        }
     }
 
 }

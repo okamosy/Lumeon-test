@@ -10,8 +10,9 @@ class DoctorControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/doctor/1');
-        $this->assertJson( $crawler->html() );
+        $client->request('GET', '/doctor/1');
+        $response = $client->getResponse();
+        $this->assertJson( $response->getContent() );
     }
 
 }
