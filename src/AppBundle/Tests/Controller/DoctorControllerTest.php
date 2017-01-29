@@ -15,4 +15,13 @@ class DoctorControllerTest extends WebTestCase
         $this->assertJson( $response->getContent() );
     }
 
+    public function testShowJsonMissingDoctor()
+    {
+        $client = static::createClient();
+
+        $client->request( 'GET', '/doctor/1234' );
+        $response = $client->getResponse();
+
+        $this->assertEquals(404, $response->getStatusCode() );
+    }
 }
