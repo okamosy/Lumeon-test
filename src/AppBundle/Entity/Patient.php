@@ -4,19 +4,54 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Class Patient
+ *
+ * @package AppBundle\Entity
+ *
+ * @ORM\Table(name="patient")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PatientRepository")
+ */
 class Patient
 {
     const GENDER_MALE   = 1;
     const GENDER_FEMALE = 2;
     const GENDER_OTHER  = 3;
 
-    /** @var  int */
+    private $genderList = [
+        self::GENDER_MALE   => 'male',
+        self::GENDER_FEMALE => 'female',
+        self::GENDER_OTHER  => 'other',
+    ];
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     private $id;
-    /** @var  string */
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
     private $name;
-    /** @var  \DateTime */
+
+    /**
+     * @var  \DateTime
+     *
+     * @ORM\Column(name="dob", type="date")
+     */
     private $dob;
-    /** @var  string */
+
+    /**
+     * @var  string
+     *
+     * @ORM\Column(name="gender", type="string", length=10))
+     */
     private $gender;
 
     /**

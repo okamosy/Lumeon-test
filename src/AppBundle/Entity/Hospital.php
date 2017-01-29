@@ -5,10 +5,30 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Class Hospital
+ *
+ * @package AppBundle\Entity
+ *
+ * @ORM\Table(name="hospital")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\HospitalRepository")
+ */
 class Hospital
 {
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     private $id;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
     private $name;
 
     /**
