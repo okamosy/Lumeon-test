@@ -48,8 +48,8 @@ class Doctor
     {
         $this->id = $id;
         $this->name = $name;
-        $this->hospital = ( $hospital instanceof ArrayCollection ) ? new ArrayCollection() : $hospital;
-        $this->patients = ( $patients instanceof ArrayCollection ) ? new ArrayCollection() : $patients;
+        $this->hospital = ( !$hospital instanceof ArrayCollection ) ? new ArrayCollection() : $hospital;
+        $this->patients = ( !$patients instanceof ArrayCollection ) ? new ArrayCollection() : $patients;
     }
 
     /**
