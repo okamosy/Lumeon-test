@@ -70,11 +70,14 @@ class Patient
      */
     private $doctor = null;
 
-    public function __construct( $id = 0, $name = '', $dob = null )
+    public function __construct( $id = 0, $name = '', $dob = null, $gender = '' )
     {
         $this->id = $id;
         $this->name = $name;
-        $this->dob = ( $dob instanceof \DateTime ) ? clone $dob : null;
+        $this->gender = $gender;
+
+        // Use the setter method due to extra logic involved.
+        $this->setDob( $dob );
     }
 
     /**
@@ -134,6 +137,11 @@ class Patient
     {
         if( !$dob instanceof \DateTime )
         {
+            if( is_array( $dob ) && isset( $dob['timestamp'] ) )
+            {
+                $dob = $dob['timestamp'];
+            }
+
             /**
              * If this is a timestamp, prepend a '@' as per the Unix Timestamp:
              * http://www.php.net/manual/en/datetime.formats.compound.php
@@ -196,11 +204,11 @@ class Patient
     /**
      * Sets the current doctor.
      *
-     * @param Doctor $doctor
+     * @param $doctor
      *
      * @return Patient
      */
-    public function setDoctor( Doctor $doctor )
+    public function setDoctor( $doctor )
     {
         $this->doctor = $doctor;
 
