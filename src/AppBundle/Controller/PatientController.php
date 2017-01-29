@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class PatientController
@@ -15,13 +16,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class PatientController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/{patientId}")
      */
-    public function ShowAction()
+    public function ShowAction( $patientId = 0 )
     {
-        return $this->render('AppBundle:Patient:show.html.twig', array(
-            // ...
-        ));
+        return new JsonResponse();
     }
 
     /**
