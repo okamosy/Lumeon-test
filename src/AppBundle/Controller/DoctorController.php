@@ -72,6 +72,12 @@ class DoctorController extends Controller
                 404
             );
         }
-        return new JsonResponse();
+
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+
+        return new JsonResponse(
+            $serializer->serialize( $doctor, 'json' )
+        );
     }
 }
