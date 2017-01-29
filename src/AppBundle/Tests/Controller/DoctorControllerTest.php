@@ -4,6 +4,9 @@ namespace AppBundle\Tests\Controller;
 
 use AppBundle\Entity\Doctor;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class DoctorControllerTest extends WebTestCase
 {
@@ -28,12 +31,18 @@ class DoctorControllerTest extends WebTestCase
 
     public function testShowJsonDoctor()
     {
+        $normalizers = array(new ObjectNormalizer());
+        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+
         $client = static::createClient();
         $client->request( 'GET', '/doctor/1' );
         $response = $client->getResponse();
 
         $doctor = new Doctor( 1, 'Test Doctor' );
+
+        $responseDoctor = $serializer->deserialize( json_decode($response->getContent()), Doctor::class, 'json' );
+
         $this->assertEquals( 200, $response->getStatusCode() );
-        $this->assertJsonStringEqualsJsonString( json_encode( $doctor ), $response->getContent() );
+        $this->assertEquals( $doctor, $responseDoctor );
     }
 }
