@@ -10,11 +10,13 @@ use Symfony\Component\Serializer\Serializer;
 
 class PatientControllerTest extends WebTestCase
 {
+    protected $fixtures;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $fixtures = $this->loadFixtureFiles(
+        $this->fixtures = $this->loadFixtureFiles(
             [
                 '@AppBundle/DataFixtures/ORM/fixtures.yml',
             ]
@@ -45,8 +47,6 @@ class PatientControllerTest extends WebTestCase
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
 
-        $patient = new Patient( 1, 'John Doe', new \DateTime( '2000-01-01' ), 'male' );
-
         $client = static::createClient();
         $client->request( 'GET', '/patient/view/1' );
 
@@ -56,7 +56,7 @@ class PatientControllerTest extends WebTestCase
         
         $responsePatient = $serializer->deserialize( json_decode($response->getContent()), Patient::class, 'json' );
 
-        $this->assertEquals( $patient, $responsePatient );
+        $this->assertEquals( $this->fixtures['patient1'], $responsePatient );
 
     }
 
