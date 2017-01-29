@@ -3,13 +3,24 @@
 namespace AppBundle\Tests\Controller;
 
 use AppBundle\Entity\Patient;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 class PatientControllerTest extends WebTestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $fixtures = $this->loadFixtureFiles(
+            [
+                '@AppBundle/DataFixtures/ORM/fixtures.yml',
+            ]
+        );
+    }
+
     public function testShowJsonResponse()
     {
         $client = static::createClient();
