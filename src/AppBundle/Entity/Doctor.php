@@ -49,7 +49,7 @@ class Doctor
         $this->id = $id;
         $this->name = $name;
         $this->hospital = $hospital;
-        $this->patients = ( !$patients instanceof ArrayCollection ) ? new ArrayCollection() : $patients;
+        $this->setPatients( $patients );
     }
 
     /**
@@ -111,12 +111,25 @@ class Doctor
     /**
      * Sets the entire patients list
      *
-     * @param ArrayCollection $patients
+     * @param $patients
      *
      * @return Doctor
      */
-    public function setPatient( ArrayCollection $patients )
+    public function setPatients( $patients )
     {
+        if( is_array( $patients ) )
+        {
+            $patients = new ArrayCollection( $patients );
+        }
+        elseif( $patients instanceof Patient )
+        {
+            $patients = new ArrayCollection( [ $patients ] );
+        }
+        else
+        {
+            $patients = new ArrayCollection();
+        }
+
         $this->patients = $patients;
 
         return $this;
@@ -184,5 +197,15 @@ class Doctor
         }
 
         return $result;
+    }
+
+    /**
+     * Returns a list of patients.
+     * 
+     * @return ArrayCollection
+     */
+    public function getPatients()
+    {
+        return $this->patients;
     }
 }
