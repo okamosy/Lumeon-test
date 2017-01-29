@@ -34,7 +34,7 @@ class PatientControllerTest extends WebTestCase
         $normalizers = array(new ObjectNormalizer());
         $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
 
-        $patient = new Patient( 1, 'John Doe', new \DateTime( '01/01/2000' ), 'male' );
+        $patient = new Patient( 1, 'John Doe', new \DateTime( '2000-01-01' ), 'male' );
 
         $client = static::createClient();
         $client->request( 'GET', '/patient/1' );
