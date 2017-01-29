@@ -48,8 +48,10 @@ class DoctorControllerTest extends WebTestCase
 
         $client->request( 'GET', '/doctor/view/1234' );
         $response = $client->getResponse();
+        $responseData = json_decode( $response->getContent() );
 
         $this->assertEquals(404, $response->getStatusCode() );
+        $this->assertEquals( 'Doctor not found', $responseData->msg );
     }
 
     public function testShowJsonDoctor()

@@ -33,7 +33,7 @@ class DoctorController extends Controller
         $doctor = $this->getDoctrine()->getRepository( 'AppBundle:Doctor' )->selectById( $doctorId );
 
         if( empty( $doctor ) ) {
-            return new JsonResponse( [ 'message' => 'Doctor ('.$doctorId.') not found' ], 404 );
+            return new JsonResponse( [ 'msg' => 'Doctor not found' ], 404 );
         }
 
         $normalizer = new ObjectNormalizer();
