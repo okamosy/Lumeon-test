@@ -5,6 +5,9 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class PatientController
@@ -32,7 +35,13 @@ class PatientController extends Controller
                 404
             );
         }
-        return new JsonResponse();
+
+        $normalizers = array(new ObjectNormalizer());
+
+        $serializer = new Serializer($normalizers, [ new JsonEncoder() ] );
+        return new JsonResponse(
+            $serializer->serialize( $patient, 'json' )
+        );
     }
 
     /**
