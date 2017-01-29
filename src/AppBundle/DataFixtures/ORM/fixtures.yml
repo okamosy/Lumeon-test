@@ -1,0 +1,3 @@
+AppBundle\Entity\Doctor:
+    doctor1:
+        name: Test Doctor
