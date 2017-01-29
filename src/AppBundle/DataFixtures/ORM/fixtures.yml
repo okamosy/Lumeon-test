@@ -7,3 +7,8 @@ AppBundle\Entity\Patient:
         name: John Doe
         dob: 2000-01-01
         gender: male
+    patient2:
+        name: Jane Doe
+        dob: 1980-10-10
+        gender: female
+        doctor: '@doctor1'
